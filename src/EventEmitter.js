@@ -44,11 +44,19 @@ const EventEmitter = () => {
   }
 }
 
+module.exports = {
+  EventEmitter
+}
+
+/* Original test cases -- refactored into spec.js
+
+////////////
 const responseToEvent = (msg) => {
   console.log(msg)
 }
 
 const eventEmitter = EventEmitter()
+////////////
 
 // on: call it everytime it emits the vent
 eventEmitter.on("pramp", responseToEvent)
@@ -63,3 +71,4 @@ eventEmitter.emit("pramp", "2nd")
 eventEmitter.off("pramp", responseToEvent)
 eventEmitter.emit("pramp", "3rd")
 eventEmitter.emit("pramp", "1st")
+*/
