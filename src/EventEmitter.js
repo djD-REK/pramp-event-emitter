@@ -5,8 +5,7 @@ const EventEmitter = () => {
   // emit infinitely if second variable in array is true
   return {
     on: (nameOfEmitter, callbackFunction) => {
-      if (activeEvents[nameOfEmitter] == null) {
-        // is null or undefined
+      if (activeEvents[nameOfEmitter] === undefined) {
         activeEvents[nameOfEmitter] = {}
       }
       activeEvents[nameOfEmitter][callbackFunction.name] = [
@@ -15,57 +14,46 @@ const EventEmitter = () => {
       ]
     },
     off: (nameOfEmitter, callbackFunction) => {
-      if (activeEvents[nameOfEmitter][callbackFunction.name] != null) {
-        // the emitter exists, i.e. is not null or undefined
-        activeEvents[nameOfEmitter][callbackFunction.name] = null
-        // null indicates the event was previously on at some point
+      if (activeEvents[nameOfEmitter][callbackFunction.name]) {
+        delete activeEvents[nameOfEmitter][callbackFunction.name]
       }
     },
     once: (nameOfEmitter, callbackFunction) => {
-      if (activeEvents[nameOfEmitter] == null) {
-        // is null or undefined
+      if (activeEvents[nameOfEmitter] === undefined) {
         activeEvents[nameOfEmitter] = {}
       }
       activeEvents[nameOfEmitter][callbackFunction.name] = [
         callbackFunction,
-        false
+        true
       ]
     },
     emit: (nameOfEmitter, functionInput) => {
-      debugger
-      if (
-        // the emitter exists, i.e. is not null or undefined
-        activeEvents[nameOfEmitter] != null &&
-        typeof activeEvents[nameOfEmitter] === "object"
-      ) {
-        /*        activeEvents[nameOfEmitter]
-          .entries()
-          .forEach(([callbackFunction, emitOnce]) => {
-            callbackFunction(functionInput)
-            if (emitOnce === true) {
-              activeEvents[nameOfEmitter][callbackFunction.name] = null
-            }
-          })*/
+      if (activeEvents[nameOfEmitter] !== undefined) {
+        for (const [callbackFunctionName, callbackArray] of Object.entries(
+          activeEvents[nameOfEmitter]
+        )) {
+          let callbackFunction = callbackArray[0]
+          callbackFunction(functionInput)
+          let emitOnce = callbackArray[1]
+          if (emitOnce === true) {
+            delete activeEvents[nameOfEmitter][callbackFunction.name]
+          }
+        }
       }
     }
   }
 }
 
-const responseToEvent = msg => {
+const responseToEvent = (msg) => {
   console.log(msg)
-} // responseToEvent.name // responseToEvent
-
-/* const responseToEventer = function Separate(msg) {
-    console.log(msg);
-}  responseToEventer.name // Separate
-*/
+}
 
 const eventEmitter = EventEmitter()
 
 // on: call it everytime it emits the vent
 eventEmitter.on("pramp", responseToEvent)
 // once: call it the first time then stop listening
-eventEmitter.once("pramp", function(msg) {
+eventEmitter.once("pramp", function (msg) {
   console.log(msg + " just once!")
 })
 // emit: run callbacks
