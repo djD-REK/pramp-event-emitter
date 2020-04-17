@@ -7,10 +7,16 @@
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },
-  "dependencies": {},
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1"
+  },
   "devDependencies": {
     "@babel/core": "7.2.0",
     "parcel-bundler": "^1.6.1"
   },
-  "keywords": []
+  "keywords": [],
+  "repository": "https://github.com/djD-REK/pramp-event-emitter.git",
+  "author": "Dr. Derek Austin <53202242+djD-REK@users.noreply.github.com>",
+  "license": "MIT"
 }
